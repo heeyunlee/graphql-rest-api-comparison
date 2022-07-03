@@ -3,7 +3,7 @@ import 'package:graphql/client.dart';
 import 'my_home_page.dart';
 import 'result.dart';
 
-final link = HttpLink('https://$baseUrl/graphqlasdasdasasaqwqew');
+final link = HttpLink('https://$baseUrl/graphql');
 final client = GraphQLClient(link: link, cache: GraphQLCache());
 
 // TODO: Add your own query here.
