@@ -1,16 +1,37 @@
-# graphql_practice
+# Comparison of GraphQL and REST API using WordPress API and WPGraphQL
 
-A new Flutter project.
+1. Clone the repo
 
-## Getting Started
+`gh repo clone heeyunlee/graphql-rest-api-comparison`
 
-This project is a starting point for a Flutter application.
+2. Get WordPress website
 
-A few resources to get you started if this is your first Flutter project:
+3. Install [WPGraphQL](https://www.wpgraphql.com/) plugin to your website
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+4. Change `baseUrl` and `query` variables to your likings
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+For example, if you want to fetch the `title`, `date`, `excerpt`, and `authorName` of the posts from your website, you could change variables to something like this:
+``` dart 
+const baseUrl = 'www.yourname.com';
+
+const String query = r'''
+query Posts($first: Int!) {
+    posts(first: $first) {
+        nodes {
+            title
+            date
+            excerpt
+            author {
+              name
+            }
+        }
+    }
+}
+''';
+```
+
+Use the tools you like (Postman or Insomnia) to find the Schemas for your query
+
+
+https://user-images.githubusercontent.com/32585133/177017901-d2ef010d-e893-4455-90a7-503b00726d0f.mov
+
