@@ -11,18 +11,15 @@ const String query = r'''
 query Posts($first: Int!) {
     posts(first: $first) {
         nodes {
-            databaseId
+            id
             title
             date
+            excerpt
             featuredImage {
-                node {
-                    sourceUrl
-                }
+                sourceUrl
             }
             author {
-                node {
-                    name
-                }
+                name
             }
             categories {
                 nodes {
