@@ -32,6 +32,7 @@ query Posts($first: Int!) {
 
 Use the tools you like (Postman or Insomnia) to find the Schemas for your query
 
+Example:
 
 https://user-images.githubusercontent.com/32585133/177017901-d2ef010d-e893-4455-90a7-503b00726d0f.mov
 
