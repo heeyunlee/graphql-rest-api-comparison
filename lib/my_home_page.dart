@@ -37,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
+    _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
     _tabController.addListener(setStateOnTabChange);
   }
 
@@ -76,7 +76,10 @@ class _MyHomePageState extends State<MyHomePage>
                   color: rhodamineColor,
                 ),
               ),
-            )
+            ),
+            Tab(
+              child: Text('REST GraphQL'),
+            ),
           ],
         ),
       ),
@@ -92,6 +95,11 @@ class _MyHomePageState extends State<MyHomePage>
             data: _graphQLResponse?.body,
             duration: _graphQLDuration,
             responseSize: _graphQLResponseSize,
+          ),
+          const BodyWidget(
+            data: Text('asdasdasd'),
+            duration: Duration(milliseconds: 200),
+            responseSize: '0 B',
           ),
         ],
       ),
@@ -123,7 +131,8 @@ class _MyHomePageState extends State<MyHomePage>
       backgroundColor: rhodamineColor,
       onPressed: () async {
         final start = DateTime.now();
-        _graphQLResponse = await postGraphQL(perPage);
+        // _graphQLResponse = await postGraphQL(perPage);
+        _graphQLResponse = await restGraphQL(perPage);
         _graphQLDuration = DateTime.now().difference(start);
         _graphQLResponseSize = await getResponseDataSize(
           response: _graphQLResponse?.body,
