@@ -67,8 +67,21 @@ Future<Result> restGraphQL(int perPage) async {
     query {
       posts(first: $perPage) {
         nodes {
-          id
-          title
+            id
+            title
+            date
+            excerpt
+            featuredImage {
+                sourceUrl
+            }
+            author {
+                name
+            }
+            categories {
+                nodes {
+                    name
+                }
+            }
         }
       }
     }

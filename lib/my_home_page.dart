@@ -32,6 +32,10 @@ class _MyHomePageState extends State<MyHomePage>
   Result? _graphQLResponse;
   String _graphQLResponseSize = '0 B';
 
+  Duration _graphQLRestDuration = Duration.zero;
+  Result? _graphQLRestResponse;
+  String _graphQLRestResponseSize = '0 B';
+
   late TabController _tabController;
 
   @override
@@ -96,16 +100,18 @@ class _MyHomePageState extends State<MyHomePage>
             duration: _graphQLDuration,
             responseSize: _graphQLResponseSize,
           ),
-          const BodyWidget(
-            data: Text('asdasdasd'),
-            duration: Duration(milliseconds: 200),
-            responseSize: '0 B',
+          BodyWidget(
+            data: _graphQLRestResponse?.body,
+            duration: _graphQLRestDuration,
+            responseSize: _graphQLRestResponseSize,
           ),
         ],
       ),
       floatingActionButton: _tabController.index == 0
           ? _buildFABForREST()
-          : _buildFABForGraphQL(),
+          : _tabController.index == 1
+              ? _buildFABForGraphQL()
+              : _buildFABForGraphQLRest(),
     );
   }
 
@@ -131,8 +137,7 @@ class _MyHomePageState extends State<MyHomePage>
       backgroundColor: rhodamineColor,
       onPressed: () async {
         final start = DateTime.now();
-        // _graphQLResponse = await postGraphQL(perPage);
-        _graphQLResponse = await restGraphQL(perPage);
+        _graphQLResponse = await postGraphQL(perPage);
         _graphQLDuration = DateTime.now().difference(start);
         _graphQLResponseSize = await getResponseDataSize(
           response: _graphQLResponse?.body,
@@ -141,6 +146,23 @@ class _MyHomePageState extends State<MyHomePage>
         setState(() {});
       },
       label: const Text('POST'),
+    );
+  }
+
+  FloatingActionButton _buildFABForGraphQLRest() {
+    return FloatingActionButton.extended(
+      backgroundColor: Colors.purpleAccent,
+      onPressed: () async {
+        final start = DateTime.now();
+        _graphQLRestResponse = await restGraphQL(perPage);
+        _graphQLRestDuration = DateTime.now().difference(start);
+        _graphQLRestResponseSize = await getResponseDataSize(
+          response: _graphQLRestResponse?.body,
+        );
+
+        setState(() {});
+      },
+      label: const Text('GraphQL Rest'),
     );
   }
 }
