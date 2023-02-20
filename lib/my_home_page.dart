@@ -32,12 +32,16 @@ class _MyHomePageState extends State<MyHomePage>
   Result? _graphQLResponse;
   String _graphQLResponseSize = '0 B';
 
+  Duration _graphQLRestDuration = Duration.zero;
+  Result? _graphQLRestResponse;
+  String _graphQLRestResponseSize = '0 B';
+
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
+    _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
     _tabController.addListener(setStateOnTabChange);
   }
 
@@ -76,7 +80,10 @@ class _MyHomePageState extends State<MyHomePage>
                   color: rhodamineColor,
                 ),
               ),
-            )
+            ),
+            Tab(
+              child: Text('REST GraphQL'),
+            ),
           ],
         ),
       ),
@@ -93,11 +100,18 @@ class _MyHomePageState extends State<MyHomePage>
             duration: _graphQLDuration,
             responseSize: _graphQLResponseSize,
           ),
+          BodyWidget(
+            data: _graphQLRestResponse?.body,
+            duration: _graphQLRestDuration,
+            responseSize: _graphQLRestResponseSize,
+          ),
         ],
       ),
       floatingActionButton: _tabController.index == 0
           ? _buildFABForREST()
-          : _buildFABForGraphQL(),
+          : _tabController.index == 1
+              ? _buildFABForGraphQL()
+              : _buildFABForGraphQLRest(),
     );
   }
 
@@ -134,6 +148,23 @@ class _MyHomePageState extends State<MyHomePage>
       label: const Text('POST'),
     );
   }
+
+  FloatingActionButton _buildFABForGraphQLRest() {
+    return FloatingActionButton.extended(
+      backgroundColor: Colors.purpleAccent,
+      onPressed: () async {
+        final start = DateTime.now();
+        _graphQLRestResponse = await restGraphQL(perPage);
+        _graphQLRestDuration = DateTime.now().difference(start);
+        _graphQLRestResponseSize = await getResponseDataSize(
+          response: _graphQLRestResponse?.body,
+        );
+
+        setState(() {});
+      },
+      label: const Text('GraphQL Rest'),
+    );
+  }
 }
 
 Future<String> getResponseDataSize({int? bytes, Object? response}) async {
@@ -153,8 +184,8 @@ Future<String> getResponseDataSize({int? bytes, Object? response}) async {
 }
 
 String formatBytes(int bytes) {
-  if (bytes <= 0) return "0 B";
-  const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  if (bytes <= 0) return '0 B';
+  const suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
   final i = (log(bytes) / log(1024)).floor();
   return '${(bytes / pow(1024, i)).toStringAsFixed(2)} ${suffixes[i]}';
 }
