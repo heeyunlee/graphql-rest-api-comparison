@@ -63,9 +63,9 @@ Future<Result> postGraphQL(int perPage) async {
 Future<Result> restGraphQL(int perPage) async {
   final url = Uri.https(baseUrl, '/graphql');
 
-  final String query = '''
-    query {
-      posts(first: $perPage) {
+  const String query = '''
+    query ArticleSummary (\$arg1: Int) {
+      posts(first: \$arg1) {
         nodes {
             id
             title
@@ -94,6 +94,8 @@ Future<Result> restGraphQL(int perPage) async {
     },
     body: jsonEncode({
       'query': query,
+      'operationName': 'ArticleSummary',
+      'variables': {'arg1': perPage},
     }),
   );
 
